@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">bluechat</string>
+    <string name="host">Host the Chat</string>
+    <string name="JoinChat">Join a Chat</string>
 </resources>
