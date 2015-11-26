@@ -14,8 +14,10 @@
         android:layout_marginBottom="120dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/background"
-        android:text="@string/host" />
+        android:background="@color/colorPrimary"
+        android:elevation="8dp"
+        android:text="@string/host"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
     <Button
         android:id="@+id/join"
@@ -24,7 +26,9 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/background"
-        android:text="@string/JoinChat" />
+        android:background="@color/colorPrimary"
+        android:elevation="8dp"
+        android:text="@string/JoinChat"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
 
 </LinearLayout>

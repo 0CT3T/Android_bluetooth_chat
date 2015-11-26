@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.85"
-        android:listSelector="@color/background" >
+        android:listSelector="@color/windowBackground" >
 
     </ListView>
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_gravity="bottom"
-        android:background="@color/white" >
+        android:background="@color/windowBackground" >
 
         <EditText
             android:id="@+id/editText1"
@@ -34,10 +34,11 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="5dp"
-            android:background="@color/white"
+            android:background="@color/windowBackground"
             android:ems="10"
             android:inputType="text"
-            android:textColorLink="@color/black" >
+            android:textColor="@color/textPrimaryColor"
+            android:textColorLink="@color/textPrimaryColor" >
 
             <requestFocus />
         </EditText>
@@ -51,7 +52,6 @@
             android:layout_marginTop="5dp"
             android:contentDescription="Send_icon"
             android:src="@drawable/fleche_send" />
-        //android:src="@android:drawable/ic_menu_send" />
     </FrameLayout>
 
 </LinearLayout>
