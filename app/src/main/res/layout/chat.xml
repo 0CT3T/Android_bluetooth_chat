@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_weight="0.85"
         android:layout_height="0dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"
         android:listSelector="@color/windowBackground" >
 
     </ListView>
