@@ -1,4 +1,4 @@
-package com.example.sebastien.bluechat;
+package com.example.sebastien.bluechat.View.Adapter;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sebastien.bluechat.Modele.Message;
+import com.example.sebastien.bluechat.R;
 
 import java.util.ArrayList;
 

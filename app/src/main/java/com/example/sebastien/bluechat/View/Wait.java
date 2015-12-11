@@ -1,7 +1,9 @@
-package com.example.sebastien.bluechat;
+package com.example.sebastien.bluechat.View;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.example.sebastien.bluechat.R;
 
 /**
  * Created by sebastien on 05/12/2015.

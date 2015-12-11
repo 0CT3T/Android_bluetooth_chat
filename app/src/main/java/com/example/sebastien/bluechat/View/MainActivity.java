@@ -1,16 +1,18 @@
-package com.example.sebastien.bluechat;
+package com.example.sebastien.bluechat.View;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
+import com.example.sebastien.bluechat.DAO.PersonneDAO;
+import com.example.sebastien.bluechat.Modele.Personne;
+import com.example.sebastien.bluechat.R;
+import com.example.sebastien.bluechat.View.Adapter.PersonneAdapter;
 
+import java.util.ArrayList;
 
 
 /**
@@ -18,12 +20,18 @@ import android.widget.ListView;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static ListView l_contact;
+    private static  ListView l_contact;
+    private         PersonneDAO SQL_message;
+    private static  PersonneAdapter mArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accueil);
+
+
+        SQL_message = new PersonneDAO(this);
+        SQL_message.open();
 
         InitList();
 
@@ -37,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         l_contact = (ListView) findViewById(R.id.list_messages);
 
         //TODO initialisation avec la base de donnée
+        ArrayList<Personne> stringListe = SQL_message.getAllPersonne();
+        // ArrayList<Message> stringListe = new ArrayList<Message>();
+        mArrayAdapter = new PersonneAdapter(this, stringListe);
+        l_contact.setAdapter(mArrayAdapter);
+
+
 
     }
 
@@ -74,5 +88,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, Chat.class));
     }
 
+
+
+
+    @Override
+    protected void onResume() {
+        SQL_message.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        SQL_message.close();
+        super.onPause();
+    }
 
 }
