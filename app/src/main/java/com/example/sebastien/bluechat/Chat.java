@@ -1,12 +1,17 @@
 package com.example.sebastien.bluechat;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.example.sebastien.bluechat.BDD.Mysqllite;
+import com.example.sebastien.bluechat.Modele.Message;
 
 import java.util.ArrayList;
 
@@ -18,6 +23,7 @@ public class Chat extends Activity {
     private static ListView  l_message;
     private static EditText  textmessage;
     private        ImageView send;
+    private        Mysqllite SQL;
 
     //pour la liste
     private static MessageAdapter mArrayAdapter;
@@ -27,8 +33,10 @@ public class Chat extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat);
 
-        //TODO initialisation du mode bluethoot
+        SQL = new Mysqllite(this);
 
+        //TODO initialisation du mode bluethoot
+        InitList();
         Initcomponent();
 
 
@@ -48,11 +56,19 @@ public class Chat extends Activity {
 
                 if(!message.isEmpty()){
                     //TODO envoyer en bluethoot
+                    //TODO ajouter à la base de donnée
                     //TODO créer des cards
-                    mArrayAdapter.add(message);
+                    Message t_message = new Message(message,Message.type_message.SEND);
+                    mArrayAdapter.add(t_message);
+                    SQL.addMessage(1,message, Message.type_message.SEND);
 
+                    l_message.invalidate();
 
                     textmessage.setText("");
+
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textmessage.getWindowToken(), 0);
+
                 }
                 else{
                     //TODO Google voice ici
@@ -65,8 +81,9 @@ public class Chat extends Activity {
     public void InitList() {
         l_message = (ListView) findViewById(R.id.list_messages);
 
-        ArrayList<String> stringListe = new ArrayList<String>();
-        mArrayAdapter = new MessageAdapter(this, stringListe );
+        ArrayList<Message> stringListe = SQL.getAllMessage();
+       // ArrayList<Message> stringListe = new ArrayList<Message>();
+        mArrayAdapter = new MessageAdapter(this, stringListe);
         l_message.setAdapter(mArrayAdapter);
 
         //TODO initialisation avec la base de donnée

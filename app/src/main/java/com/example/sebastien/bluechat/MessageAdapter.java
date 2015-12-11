@@ -1,6 +1,7 @@
 package com.example.sebastien.bluechat;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,21 +9,26 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.sebastien.bluechat.Modele.Message;
+
 import java.util.ArrayList;
+
 
 /**
  * Created by sebastien on 05/12/2015.
  */
 public class MessageAdapter extends BaseAdapter {
 
-    private ArrayList<String> message;
+    private ArrayList<Message> message;
     //le context dans lesquel il est utilisé
     private Context mContext;
     //
     private LayoutInflater mInflater;
 
 
-    public MessageAdapter(Context context, ArrayList<String> aListM) {
+
+
+    public MessageAdapter(Context context, ArrayList<Message> aListM) {
         mContext = context;
         message = aListM;
         mInflater = LayoutInflater.from(mContext);
@@ -32,9 +38,10 @@ public class MessageAdapter extends BaseAdapter {
         return message.size();
     }
 
-    public void add(String value) {
+    public void add(Message value) {
         message.add(value);
     }
+
 
     @Override
     public Object getItem(int position) {
@@ -58,9 +65,24 @@ public class MessageAdapter extends BaseAdapter {
         }
 
         TextView mes_temp = (TextView)layoutItem.findViewById(R.id.message);
-        mes_temp.setText(message.get(position));
+        mes_temp.setText(message.get(position).getMessage());
 
-        layoutItem.setBackgroundResource(R.color.colorPrimary);
+
+
+        //affichage en fonction du type
+        switch(message.get(position).getType()) {
+            case RECEIVE:
+
+                    layoutItem.setBackgroundResource(R.color.chat_receive);
+                    layoutItem.setGravity(Gravity.LEFT);
+
+                break;
+            case SEND:
+                    layoutItem.setBackgroundResource(R.color.chat_send);
+                    layoutItem.setGravity(Gravity.RIGHT);
+                break;
+        }
+
 
         //On retourne l'item créé.
         return layoutItem;
