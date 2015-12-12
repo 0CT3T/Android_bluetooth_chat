@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.example.sebastien.bluechat.BDD.Mysqllite;
@@ -44,14 +45,15 @@ public class PersonneDAO {
     public void addPersonnage(Personne personne)
     {
 
-        //TODO test si n'existe pas
+        // test si n'existe pas
+        if (getWithName(personne.getName())==null) {
 
-        ContentValues values = new ContentValues();
-        //ligne à enlever
-        values.put("name",personne.getName());
+            ContentValues values = new ContentValues();
+            //ligne à enlever
+            values.put("name", personne.getName());
 
-        database.insert("personnes", null, values);
-        database.close();
+            database.insert("personnes", null, values);
+        }
 
     }
 
@@ -60,24 +62,54 @@ public class PersonneDAO {
 
         String query = "SELECT * FROM personnes";
 
-        Cursor cursor = database.rawQuery(query, null);
 
-        Personne temp = null;
-        if (cursor.moveToFirst()){
-            do{
+            Cursor cursor = database.rawQuery(query, null);
+
+            Personne temp = null;
+            if (cursor.moveToFirst()) {
+                do {
 
 
+                    temp = new Personne(cursor.getString(1));
 
-                temp = new Personne(cursor.getString(2));
+                    Personne_list.add(temp);
+                } while (cursor.moveToNext());
+            }
 
-                Personne_list.add(temp);
-            }while (cursor.moveToNext());
-        }
+
 
 
         return Personne_list;
 
     }
+
+    /**
+     * Afin de tester si existe
+     * @param name
+     * @return
+     */
+    public Personne getWithName(String name) {
+        Personne personne = null;
+
+        String query = "SELECT * FROM personnes WHERE name = '"+name +"'";
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    personne = new Personne(cursor.getString(1));
+                } while (cursor.moveToNext());
+            }
+        }
+        catch (SQLiteException ex){
+            ex.printStackTrace();
+        }
+
+
+        return personne;
+    }
+
 
     public Personne getWithId(int id) {
         Personne personne = null;
@@ -88,7 +120,7 @@ public class PersonneDAO {
 
         if (cursor.moveToFirst()){
             do{
-                personne = new Personne(cursor.getString(2));
+                personne = new Personne(cursor.getString(1));
             }while (cursor.moveToNext());
         }
 

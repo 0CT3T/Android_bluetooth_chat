@@ -14,5 +14,6 @@ public class Wait extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wait);
+        //TODO a completer
     }
 }

@@ -29,10 +29,16 @@ public class Chat extends Activity {
     //pour la liste
     private static MessageAdapter mArrayAdapter;
 
+    //id communication
+    private static int id_com;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat);
+
+        Bundle b = getIntent().getExtras();
+        id_com = b.getInt("key");
 
         SQL_message = new MessageDAO(this);
         SQL_message.open();
@@ -58,11 +64,10 @@ public class Chat extends Activity {
 
                 if(!message.isEmpty()){
                     //TODO envoyer en bluethoot
-                    //TODO ajouter à la base de donnée
                     //TODO créer des cards
-                    Message t_message = new Message(message,Message.type_message.SEND);
+                    Message t_message = new Message(message,Message.type_message.SEND,id_com);
                     mArrayAdapter.add(t_message);
-                    SQL_message.addMessage(1,t_message);
+                    SQL_message.addMessage(t_message);
 
                     l_message.invalidate();
 
@@ -83,12 +88,13 @@ public class Chat extends Activity {
     public void InitList() {
         l_message = (ListView) findViewById(R.id.list_messages);
 
-        ArrayList<Message> stringListe = SQL_message.getAllMessage();
+        //initialisation avec la base de donnée
+        ArrayList<Message> stringListe = SQL_message.getAllMessage(id_com);
        // ArrayList<Message> stringListe = new ArrayList<Message>();
         mArrayAdapter = new MessageAdapter(this, stringListe);
         l_message.setAdapter(mArrayAdapter);
 
-        //TODO initialisation avec la base de donnée
+
 
     }
 

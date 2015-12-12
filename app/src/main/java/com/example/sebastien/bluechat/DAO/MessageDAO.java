@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class MessageDAO {
 
-    private SQLiteDatabase database;
+    private SQLiteDatabase database = null;
     private Mysqllite sqlitehelper;
 
     /***
@@ -29,6 +29,7 @@ public class MessageDAO {
     }
 
     public void open(){
+
         database = sqlitehelper.getWritableDatabase();
     }
 
@@ -38,17 +39,14 @@ public class MessageDAO {
 
     /**
      * Ajouter un message dans la Base de donnée
-     * @param name
      * @param message
      */
-    public void addMessage(int name, Message message)
+    public void addMessage(Message message)
     {
-        //TODO recupere id avec nom personne
-        //id_personne = get
 
         ContentValues values = new ContentValues();
         //ligne à enlever
-        values.put("id_personne",name);
+        values.put("id_personne",message.getId());
         values.put("message", message.getMessage());
 
         switch (message.getType())
@@ -64,15 +62,14 @@ public class MessageDAO {
 
 
         database.insert("messages", null, values);
-        database.close();
 
     }
 
-    public ArrayList<Message> getAllMessage() {
+    public ArrayList<Message> getAllMessage(int id) {
         ArrayList<Message> message_list = new ArrayList<Message>();
 
         //TODO query pour recuperer avec un nom
-        String query = "SELECT * FROM messages";
+        String query = "SELECT * FROM messages WHERE id_personne = " + id;
 
         Cursor cursor = database.rawQuery(query, null);
 
@@ -91,7 +88,7 @@ public class MessageDAO {
                 }
 
 
-                temp = new Message(cursor.getString(2),t_message);
+                temp = new Message(cursor.getString(2),t_message,Integer.parseInt(cursor.getString(1)));
 
                 message_list.add(temp);
             }while (cursor.moveToNext());
