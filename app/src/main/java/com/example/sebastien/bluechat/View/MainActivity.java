@@ -1,21 +1,21 @@
 package com.example.sebastien.bluechat.View;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sebastien.bluechat.Bluetooth.Bluetooth;
 import com.example.sebastien.bluechat.DAO.MessageDAO;
 import com.example.sebastien.bluechat.DAO.PersonneDAO;
+import com.example.sebastien.bluechat.Global_variables.Global_variables;
 import com.example.sebastien.bluechat.Modele.Message;
 import com.example.sebastien.bluechat.Modele.Personne;
 import com.example.sebastien.bluechat.R;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
 
 
@@ -37,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
         DETAIL
     }
 
-    private static  ListView        l_contact;
-    private         PersonneDAO     SQL_personne;
-    private static  PersonneAdapter mArrayAdapter;
-    private         state_view      state = state_view.PERSONNE;
-    private         MessageDAO      SQL_message;
-    private         Context         context;
+    private static  ListView            l_contact;
+    private         PersonneDAO         SQL_personne;
+    private static  PersonneAdapter     mArrayAdapter;
+    private         state_view          state = state_view.PERSONNE;
+    private         MessageDAO          SQL_message;
+    private         Context             context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
         SQL_message = new MessageDAO(this);
         SQL_message.open();
+        mBluetooth = new Bluetooth(this, this);
+        mBluetooth.launchAdapter();
+
+        //SQL_personne.addPersonnage(new Personne("Thomas", "0x22"));
 
 
 
         InitList();
-
     }
 
     /***************************************
@@ -97,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getBaseContext(), personne.getName(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
 
@@ -122,23 +124,49 @@ public class MainActivity extends AppCompatActivity {
             case R.id.host:
                 startHost();
                 return true;
+            case R.id.Blue:
+                mBluetooth.ToggleblueTooth();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void startHost(){
+
+        if(!mBluetooth.getBTEnabled()) {
+            Toast.makeText(this, R.string.Ask_BT_Activation,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+
         Intent intent = new Intent(this, Wait.class);
+        Bundle b = new Bundle();
+        b.putString(Global_variables.HOST_NAME, mBluetooth.getName());
+        b.putString(Global_variables.WAIT_TYPE, Global_variables.HOST);
+        intent.putExtras(b);
         startActivity(intent);
+
+
+
     }
 
     private void startJoin(){
-        Intent intent = new Intent(this, Chat.class);
+
+        if(!mBluetooth.getBTEnabled()){
+            Toast.makeText(this, R.string.Ask_BT_Activation,Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(this, Wait.class);
         Bundle b = new Bundle();
-        //TODO initialiser avec le bluethoot
-        b.putInt("key", 0); //Your id
-        intent.putExtras(b); //Put your id to your next Intent
+        b.putString(Global_variables.WAIT_TYPE, Global_variables.JOIN);
+
+        intent.putExtras(b);
         startActivity(intent);
+
     }
 
 
@@ -149,12 +177,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         SQL_personne.open();
         //Remettre la vue d'origine
         InitList();
         state = state_view.PERSONNE;
 
-        super.onResume();
+        mBluetooth.setmActivity(this);
+
+        mBluetooth.launchAdapter();
     }
 
     @Override
@@ -183,9 +214,11 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-
-
         return true;
     }
+    public Bluetooth getM_Bluetooth(){
+        return mBluetooth;
+    }
+
 
 }

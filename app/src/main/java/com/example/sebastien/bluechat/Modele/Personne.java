@@ -6,11 +6,15 @@ package com.example.sebastien.bluechat.Modele;
 public class Personne {
 
     private String name;
+    
+    private String address;
 
     private int id;
 
-    public Personne(String name) {
-        this.name = name;
+    public Personne(String name, String Adress) {
+        
+        this.name   = name;
+        this.address = Adress;
     }
 
     public String getName() {
@@ -27,5 +31,9 @@ public class Personne {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

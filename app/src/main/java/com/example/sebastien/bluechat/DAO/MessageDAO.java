@@ -68,7 +68,7 @@ public class MessageDAO {
     public ArrayList<Message> getAllMessage(int id) {
         ArrayList<Message> message_list = new ArrayList<Message>();
 
-        //TODO query pour recuperer avec un nom
+
         String query = "SELECT * FROM messages WHERE id_personne = " + id;
 
         Cursor cursor = database.rawQuery(query, null);

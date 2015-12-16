@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/contentmessage">
+    android:id="@+id/contentdevice">
 
-    <TextView android:text="Message" android:id="@+id/message"
+    <TextView android:text="Device" android:id="@+id/dev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp">
+        android:textSize="40sp">
     </TextView>
 
 </LinearLayout>

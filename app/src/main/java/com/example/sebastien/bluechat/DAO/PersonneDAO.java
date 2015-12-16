@@ -51,6 +51,7 @@ public class PersonneDAO {
             ContentValues values = new ContentValues();
             //ligne à enlever
             values.put("name", personne.getName());
+            values.put("address", personne.getAddress());
 
             database.insert("personnes", null, values);
         }
@@ -69,10 +70,11 @@ public class PersonneDAO {
             if (cursor.moveToFirst()) {
                 do {
 
-
-                    temp = new Personne(cursor.getString(1));
+                    temp = new Personne(cursor.getString(1), cursor.getString(2));
+                    temp.setId(cursor.getInt(0));
 
                     Personne_list.add(temp);
+                    System.out.println(temp.getName());
                 } while (cursor.moveToNext());
             }
 
@@ -98,7 +100,7 @@ public class PersonneDAO {
 
             if (cursor.moveToFirst()) {
                 do {
-                    personne = new Personne(cursor.getString(1));
+                    personne = new Personne(cursor.getString(1),cursor.getString(2));
                 } while (cursor.moveToNext());
             }
         }
@@ -110,17 +112,59 @@ public class PersonneDAO {
         return personne;
     }
 
-
-    public Personne getWithId(int id) {
+    /**
+     * Afin de tester si existe
+     * @param address
+     * @return
+     */
+    public Personne getWithAddress(String address) {
         Personne personne = null;
 
-        String query = "SELECT * FROM personnes WHERE id_personne="+id;
+        String query = "SELECT * FROM personnes WHERE address = '"+address +"'";
+
+        try {
+            Cursor cursor = database.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    personne = new Personne(cursor.getString(1),cursor.getString(2));
+                } while (cursor.moveToNext());
+            }
+        }
+        catch (SQLiteException ex){
+            ex.printStackTrace();
+        }
+
+        return personne;
+    }
+
+    public int getId(Personne p){
+        int id = -1;
+        String query = "SELECT * FROM personnes WHERE address = '"+p.getAddress()+"'" ;
 
         Cursor cursor = database.rawQuery(query, null);
 
         if (cursor.moveToFirst()){
             do{
-                personne = new Personne(cursor.getString(1));
+                if(p.getAddress().equals(cursor.getString(2))&&p.getName().equals(cursor.getString(1)))
+                p.setId(cursor.getInt(0));
+            }while (cursor.moveToNext());
+        }
+        id = p.getId();
+        return id;
+    }
+
+
+    public Personne getWithId(int id) {
+        Personne personne = null;
+
+        String query = "SELECT * FROM personnes WHERE id = "+id;
+
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()){
+            do{
+                personne = new Personne(cursor.getString(1),cursor.getString(2));
             }while (cursor.moveToNext());
         }
 

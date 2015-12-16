@@ -4,4 +4,8 @@
     <string name="JoinChat">Join a Chat</string>
     <string name="menu">settings</string>
     <string name="reseau">Le nom de votre reseau est</string>
+    <string name="Activate_BT">Activate BT</string>
+    <string name="Deactivate_BT">Deactivate BT</string>
+    <string name="Toggle_Bluetooth">Toggle Bluetooth</string>
+    <string name="Ask_BT_Activation">Activate Bluetooth to continue</string>
 </resources>

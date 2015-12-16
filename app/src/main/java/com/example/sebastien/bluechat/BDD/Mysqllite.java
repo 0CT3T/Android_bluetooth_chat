@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Mysqllite extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "MessageDB";
 
 
@@ -34,7 +34,8 @@ public class Mysqllite extends SQLiteOpenHelper {
 
         String CREATE_PERSONNE = "CREATE TABLE personnes ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                "name TEXT); ";
+                "name TEXT, " +
+                "address TEXT );";
 
         db.execSQL(CREATE_PERSONNE);
         db.execSQL(CREATE_MESSAGE);
